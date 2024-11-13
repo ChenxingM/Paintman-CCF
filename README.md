@@ -1,3 +1,4 @@
+[日本語](README.md) | [中文](README_zh.md)
 # Paintman 用カラーチャートファイル (CCF) 生成・読み取りプログラム
 
 ## 概要
