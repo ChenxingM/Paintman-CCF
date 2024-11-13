@@ -1,6 +1,9 @@
 import os.path
 from typing import List, Tuple
 
+import unicodedata
+
+
 class ColorChartFile:
     def __init__(self, color_data: List[Tuple[Tuple[int, int, int], str]]):
         """
@@ -33,8 +36,22 @@ class ColorChartFile:
             if char.isascii():
                 encoded_bytes.extend(char.encode('ascii'))
             else:
-                # それ以外の文字はGB2312でエンコード
-                encoded_bytes.extend(char.encode('gb2312'))
+                # Unicodeデータベースを使用して文字の種類を確認
+                char_category = unicodedata.name(char)
+                try:
+                    if "CJK UNIFIED IDEOGRAPH" in char_category:
+                        # もし文字が中国語の漢字であれば、EUC-CNでエンコード
+                        encoded_bytes.extend(char.encode('euc_cn'))
+                    elif "HIRAGANA" in char_category or "KATAKANA" in char_category or "CJK" in char_category:
+                        # もし文字が日本語の文字（ひらがな、カタカナ、または日本語の漢字）であれば、EUC-JPでエンコード
+                        encoded_bytes.extend(char.encode('euc_jp'))
+                    else:
+                        # もし文字が中国語や日本語の文字でない場合、例外を発生させる
+                        raise UnicodeEncodeError("サポートされていない文字エンコード", char, -1, -1,
+                                                 "EUC-CNまたはEUC-JPでサポートされていない文字です。")
+                except UnicodeEncodeError as e:
+                    # エンコードエラーを報告
+                    raise UnicodeEncodeError(f"文字 '{char}' のEUC-CNまたはEUC-JPでのエンコードに失敗しました: {e}")
 
         return bytes(encoded_bytes)
 
@@ -119,11 +136,11 @@ if __name__ == "__main__":
         ((255, 0, 0), "Red"),
         ((0, 255, 0), "Green"),
         ((0, 0, 255), "Blue"),
-        ((0, 0, 0), "黑色"),
+        ((0, 0, 0), "黑色"), # 中国語の文字
         ((255, 255, 255), "White白色"),
         ((128, 128, 128), "Gray灰色"),
         ((255, 255, 0), "Yellow"),
-        ((0, 255, 255), "Cyan"),
+        ((0, 255, 255), "Cyanシアン"), # 日本語の文字
         ((255, 0, 255), "Magenta")
     ]
 

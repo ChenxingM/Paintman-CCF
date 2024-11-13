@@ -22,7 +22,7 @@ class CCFFileReader:
 
     def decode_label(self, label_bytes: bytes) -> str:
         """
-        ラベルをデコードします。英数字と記号はASCII、それ以外はGB2312と見なします。
+        ラベルをデコードします。英数字と記号はASCII、中国語の文字はEUC-CN、日本語の文字はEUC-JPでデコードします。
 
         :param label_bytes: エンコードされたラベルのバイト列。
         :return: デコードされたラベル文字列。
@@ -30,12 +30,18 @@ class CCFFileReader:
         decoded_label = ""
         i = 0
         while i < len(label_bytes):
-            if label_bytes[i] <= 127:  # ASCII範囲内
+            if label_bytes[i] <= 127:  # ASCII範囲内の場合
                 decoded_label += label_bytes[i:i + 1].decode('ascii')
                 i += 1
-            else:  # 非ASCII（GB2312範囲）
-                decoded_label += label_bytes[i:i + 2].decode('gb2312')
-                i += 2
+            else:
+                try:
+                    # まずEUC-CNでデコードを試みる（中国語用）
+                    decoded_label += label_bytes[i:i + 2].decode('euc_cn')
+                    i += 2
+                except UnicodeDecodeError:
+                    # EUC-CNでデコードできない場合は、EUC-JPでデコードを試みる（日本語用）
+                    decoded_label += label_bytes[i:i + 2].decode('euc_jp')
+                    i += 2
         return decoded_label
 
     def read_ccf_file(self) -> List[Tuple[str, Tuple[int, int, int]]]:
