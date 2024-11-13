@@ -20,7 +20,7 @@
 2. `ColorChartFile` クラスのインスタンスを作成し、`create_ccf_file` メソッドを使用してCCFファイルを生成します。
 3. 生成されたファイルは指定したパスに保存されます。
 4. 生成されたファイルは `read_ccf.py` で読み取ることができます。また、Paintmanで開くこともできます。
-![Paintmanで開いたCCFファイル](screenshot\output_sample.png)
+![Paintmanで開いたCCFファイル](screenshot/output_sample.png)
 
 ### コードの説明
 - **`dec_to_hex_byte` メソッド**: 10進数の値を1バイトの16進数に変換します。
