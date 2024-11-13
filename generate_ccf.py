@@ -24,7 +24,7 @@ class ColorChartFile:
 
     def encode_label(self, label: str) -> bytes:
         """
-        ラベルをエンコードします。英数字と記号はASCII、その他はGB2312を使用。
+        ラベルをエンコードします。英数字と記号はASCII、中国語の文字はEUC-CN、日本語の文字はEUC-JPでデコードします。
 
         :param label: ラベル文字列。
         :return: エンコードされたバイト列。
