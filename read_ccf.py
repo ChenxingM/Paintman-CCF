@@ -22,7 +22,7 @@ class CCFFileReader:
 
     def decode_label(self, label_bytes: bytes) -> str:
         """
-        ラベルをデコードします。英数字と記号はASCII、国語、日本語の文字はGB18030でデコードします。
+        ラベルをデコードします。英数字と記号はASCII、中国語、日本語の文字はGB18030でデコードします。
 
         :param label_bytes: エンコードされたラベルのバイト列。
         :return: デコードされたラベル文字列。
