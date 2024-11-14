@@ -24,7 +24,7 @@ class ColorChartFile:
 
     def encode_label(self, label: str) -> bytes:
         """
-        ラベルをエンコードします。英数字と記号はASCII、中国語の文字はEUC-CN、日本語の文字はEUC-JPでデコードします。
+        ラベルをエンコードします。英数字と記号はASCII、中国語、日本語の文字はGB18030でエンコードします。
 
         :param label: ラベル文字列。
         :return: エンコードされたバイト列。
@@ -36,22 +36,7 @@ class ColorChartFile:
             if char.isascii():
                 encoded_bytes.extend(char.encode('ascii'))
             else:
-                # Unicodeデータベースを使用して文字の種類を確認
-                char_category = unicodedata.name(char)
-                try:
-                    if "CJK UNIFIED IDEOGRAPH" in char_category:
-                        # もし文字が中国語の漢字であれば、EUC-CNでエンコード
-                        encoded_bytes.extend(char.encode('gb18030')) # GB18030は、EUC-CNやEUC-JPに含まれない文字をサポート
-                    elif "HIRAGANA" in char_category or "KATAKANA" in char_category or "CJK" in char_category:
-                        # もし文字が日本語の文字（ひらがな、カタカナ、または日本語の漢字）であれば、EUC-JPでエンコード
-                        encoded_bytes.extend(char.encode('euc_jp'))
-                    else:
-                        # もし文字が中国語や日本語の文字でない場合、例外を発生させる
-                        raise UnicodeEncodeError("サポートされていない文字エンコード", char, -1, -1,
-                                                 "EUC-CNまたはEUC-JPでサポートされていない文字です。")
-                except UnicodeEncodeError as e:
-                    # エンコードエラーを報告
-                    raise UnicodeEncodeError(f"文字 '{char}' のEUC-CNまたはEUC-JPでのエンコードに失敗しました: {e}")
+                encoded_bytes.extend(char.encode('gb18030')) # GB18030は、EUC-CNやEUC-JPに含まれない文字もサポート
 
         return bytes(encoded_bytes)
 
@@ -135,8 +120,8 @@ if __name__ == "__main__":
     example_color_data: List[Tuple[Tuple[int, int, int], str]] = [
         ((255, 0, 0), "Red"),
         ((0, 255, 0), "Green"),
-        ((0, 0, 255), "Blue"),
-        ((0, 0, 0), "黑色"), # 中国語の文字
+        ((0, 0, 255), "Blue峠"),
+        ((0, 0, 0), "黑色辻"), # 中国語の文字
         ((255, 255, 255), "White白色"),
         ((128, 128, 128), "Gray灰色"),
         ((255, 255, 0), "Yellow"),
