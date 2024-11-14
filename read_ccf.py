@@ -1,6 +1,4 @@
 from typing import List, Tuple
-import os
-
 
 class CCFFileReader:
     def __init__(self, file_path: str):

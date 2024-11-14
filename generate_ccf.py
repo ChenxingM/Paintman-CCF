@@ -1,8 +1,5 @@
-import os.path
+import os
 from typing import List, Tuple
-
-import unicodedata
-
 
 class ColorChartFile:
     def __init__(self, color_data: List[Tuple[Tuple[int, int, int], str]]):
