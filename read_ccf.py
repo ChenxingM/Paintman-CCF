@@ -36,7 +36,7 @@ class CCFFileReader:
             else:
                 try:
                     # まずEUC-CNでデコードを試みる（中国語用）
-                    decoded_label += label_bytes[i:i + 2].decode('euc_cn')
+                    decoded_label += label_bytes[i:i + 2].decode('gb18030') # GB18030は、EUC-CNやEUC-JPに含まれない文字をサポート
                     i += 2
                 except UnicodeDecodeError:
                     # EUC-CNでデコードできない場合は、EUC-JPでデコードを試みる（日本語用）

@@ -41,7 +41,7 @@ class ColorChartFile:
                 try:
                     if "CJK UNIFIED IDEOGRAPH" in char_category:
                         # もし文字が中国語の漢字であれば、EUC-CNでエンコード
-                        encoded_bytes.extend(char.encode('euc_cn'))
+                        encoded_bytes.extend(char.encode('gb18030')) # GB18030は、EUC-CNやEUC-JPに含まれない文字をサポート
                     elif "HIRAGANA" in char_category or "KATAKANA" in char_category or "CJK" in char_category:
                         # もし文字が日本語の文字（ひらがな、カタカナ、または日本語の漢字）であれば、EUC-JPでエンコード
                         encoded_bytes.extend(char.encode('euc_jp'))
